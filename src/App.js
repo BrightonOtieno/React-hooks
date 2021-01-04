@@ -2,9 +2,15 @@ import React , {useState} from 'react';
 //import './App.css';
 // TODO COMponent
 // could pass in props.todo.text ... but used variable from destructuring
-function Todo ({todo, index}){
+function Todo ({todo, index,completeTodo,deleteTodo}){
 return(
-  <div className="todo">{todo.text}</div>
+  <div style={{textDecoration:todo.isCompleted ? 'line-through ':''}} className="todo">{todo.text}
+  <div>
+    <button style={{float:'right'}} onClick ={()=>completeTodo(index)}>Complete</button>
+
+    <button style={{float:'right'}} onClick ={()=>deleteTodo(index)}>X</button>
+  </div>
+  </div>
 )
 }
 
@@ -60,13 +66,28 @@ const addTodo = (text) =>{
   const newTodos = [...todos,{text}];
   setTodos(newTodos);
 }
+// mark a todo
 
+const completeTodo = (index) => {
+  // copy everything  from todos and create a list
+  const newTodos = [...todos];
+  // grab the todo with that index 
+  newTodos[index].isCompleted = !newTodos[index].isCompleted
+  setTodos(newTodos);
+} 
+
+// Delete Todo
+const deleteTodo = (index) =>{
+  const newTodos = [...todos];
+  newTodos.splice(index,1);
+  setTodos(newTodos)
+}
 
 return (
   <div className = 'app'>
     <div className="todo-list">
       {todos.map((todo,index)=> (
-      <Todo key={index} index={index} todo={todo}/>
+      <Todo key={index} index={index} todo={todo} completeTodo={completeTodo} deleteTodo={deleteTodo}/>
       ))
         
       }
